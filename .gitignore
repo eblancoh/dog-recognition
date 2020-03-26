@@ -1,0 +1,6 @@
+dataset/*
+*.h5
+*labels.json
+samples/*
+dataset/*
+dataset-original/*
