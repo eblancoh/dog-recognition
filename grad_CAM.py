@@ -12,6 +12,7 @@ from keras_vggface import utils
 from vis.visualization import visualize_cam
 from vis.utils import utils as vis_utils
 import argparse
+from training import precision, recall, f1
 
 
 class ModelLoad(object):
@@ -20,7 +21,10 @@ class ModelLoad(object):
     def model_loader(self):
         try:
             print("Trying to restore last checkpoint ...")
-            model = load_model(filepath=self.filepath, compile=True)
+            model = load_model(self.filepath, \
+                               custom_objects={"precision": precision, 
+                                               "recall": recall, 
+                                               "f1": f1})
             print("Restored model from:", self.filepath)
 
             return model

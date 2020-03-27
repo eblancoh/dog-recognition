@@ -156,9 +156,8 @@ class Generator(object):
                             brightness_range=[0.8, 1.2],
                             width_shift_range=self.width*0.005,
                             height_shift_range=self.height*0.005,
-                            #shear_range=0.01,
                             horizontal_flip=True,
-                            validation_split=0.2
+                            validation_split=0.3
                             ) 
 
     def dataset_generator(self):
@@ -213,7 +212,7 @@ class FitGenerator(object):
         tensorboard_callback = TensorBoard(log_dir=logdir,
                                           histogram_freq=0, # It is general issue with keras/tboard that you cannot get histograms with a validation_generator
                                           write_graph=True,
-                                          write_images=True,
+                                          write_images=False,
                                           update_freq='batch'
                                           )
 
@@ -241,18 +240,26 @@ class FitGenerator(object):
             json_classes = json.load(json_file)
         classes = self.test_generator.classes[self.test_generator.index_array]
         target_names = list(json_classes.keys())
-        print('Classification Report')
+        print('Classification Report generated.')
+
+        report_tmstmp = datetime.now().strftime("%Y%m%d-%H%M%S")
         # Reporte de clasificación
-        print(classification_report(self.test_generator.classes, 
+        report = classification_report(self.test_generator.classes, 
                                     class_pred, 
                                     target_names=target_names,
-                                    digits=5))
+                                    digits=5, 
+                                    output_dict=True)
+        report = pd.DataFrame(report).transpose()
+        report.to_csv('classification_report_' + report_tmstmp +'.csv')
+
+        # Matriz de confusión
         cm = pd.DataFrame(confusion_matrix(classes, class_pred), \
                                            index = target_names, \
                                            columns = target_names)
-        sns.heatmap(cm, annot=True)
         #Guardamos la matriz de confusión en jpg
-        plt.savefig('confusion_matrix_' + datetime.now().strftime("%Y%m%d-%H%M%S") + '.jpg')
+        cm.to_csv('confusion_matrix_'+ report_tmstmp +'.csv')
+        print('Confusion Matrix generated.')
+
         
 
 class CheckpointsMkdir(object):

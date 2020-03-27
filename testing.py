@@ -6,7 +6,7 @@ import json
 import numpy as np
 import argparse
 import operator
-
+# from training import precision, recall, f1
 
 class ModelLoad(object):
     def __init__(self, filepath, **kwargs):
