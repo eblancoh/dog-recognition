@@ -11,6 +11,7 @@ from keras.engine import Model
 from keras.applications import vgg16
 from keras_vggface.vggface import VGGFace
 from keras import backend as K
+import tensorflow as tf
 
 
 def normalize(x):
@@ -139,6 +140,8 @@ def visualize_layer(model,
                 (1, intermediate_dim[0], intermediate_dim[1], 3))
         input_img_data = (input_img_data - 0.5) * 20 + 128
 
+        print(input_img_data.shape)
+
         # Slowly upscaling towards the original size prevents
         # a dominating high-frequency of the to visualized structure
         # as it would occur if we directly compute the 412d-image.
@@ -242,7 +245,7 @@ def visualize_layer(model,
 
 def main():
 
-    architecture = 'resnet50'
+    architecture = 'vgg16'
     # No es necesario cargar todo el checkpoint
     vggface = VGGFace(include_top=False, 
                       model=architecture, 
@@ -254,7 +257,7 @@ def main():
 
     # Añadimos capas de clasificación a la red convolucional
     if architecture == 'vgg16':
-        last_layer = vggface.get_layer('flatten').output
+        last_layer = vggface.get_layer('pool5').output
     elif architecture == 'resnet50':
         last_layer = vggface.get_layer('flatten_1').output
     elif architecture == 'senet50':
