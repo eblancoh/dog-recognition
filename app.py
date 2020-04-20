@@ -90,7 +90,7 @@ def to_farm():
 
 # start the server with the 'run()' method
 if __name__ == '__main__':
-    app.run(host='localhost', debug=True)
+    app.run(host='localhost', debug=True, port='5000')
     # app.run(debug=True)
 
 # TODO: atrás para otra granja

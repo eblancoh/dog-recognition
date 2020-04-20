@@ -20,7 +20,7 @@
                     <a class="nav-link" href="#">Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" target="_blank" rel="noopener noreferrer" href="https://github.com/eblancoh/cattle-recognition">GitHub</a>
+                    <a class="nav-link" target="_blank" rel="noopener noreferrer" href="https://github.com/eblancoh/dog-recognition">GitHub</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#">Contact</a>
@@ -31,22 +31,22 @@
 <div class="jumbotron jumbotron-fluid bg-dark">
 
         <div class="jumbotron-background">
-            <img src="../static/img/cows-wallpaper.jpg" class="blur ">
+            <img src="../static/img/now-kiss.jpg" class="blur ">
         </div>
         
         <div class="container text-white">
         
-            <h1 class="display-4">Clasificador de ganado</h1>
-            <p class="lead">Identificando ganado haciendo uso de Deep Learning con redes convolucionales</p>
+            <h1 class="display-4">Clasificador de perros</h1>
+            <p class="lead">Identificando perros haciendo uso de Deep Learning con redes convolucionales</p>
             <hr class="my-4">
-            <p>Seleccione el identificador de su granja para cargar el modelo.</p>
+            <p>Seleccione el identificador de su región para cargar el modelo.</p>
             
             <form class="form-inline" method="POST" action="{{ url_for('load_model') }}">
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"></span>
                                 <select name="comp_select" class="selectpicker form-control" data-live-search="true">
-                                <option selected disabled hidden>Nombre de la granja</option>
+                                <option selected disabled hidden>Nombre del modelo</option>
                                 {% for o in data %}
                                 <option value="{{ o.granja }}">{{ o.granja }}</option>
                                 {% endfor %}
@@ -70,7 +70,7 @@
 
 <footer>
         <div class="references container text-center">
-            <span class="text-muted">Copyright &copy; 2019, Telefónica CDO. All Rights Reserved.</span>
+            <span class="text-muted">Copyright &copy; 2020, Telefónica CDCO. All Rights Reserved.</span>
         </div>
         </footer>
     

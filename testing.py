@@ -1,12 +1,16 @@
 from keras.models import load_model
 from keras.preprocessing import image
 from keras_vggface import utils
+from keras.backend import get_session
 import os
 import json
 import numpy as np
 import argparse
 import operator
-# from training import precision, recall, f1
+from training import precision, recall, f1
+from tensorflow.python.keras.backend import set_session
+from tensorflow.python.keras.models import load_model
+import tensorflow as tf
 
 class ModelLoad(object):
     def __init__(self, filepath, **kwargs):
@@ -14,7 +18,20 @@ class ModelLoad(object):
     def model_loader(self):
         try:
             print("Trying to restore last checkpoint from the farm...")
-            model = load_model(self.filepath, compile=True)
+            # global sess
+            # global graph
+            # sess = tf.Session()
+            # graph = tf.get_default_graph()
+            global session
+            session = get_session()
+            init = tf.global_variables_initializer()
+            session.run(init)
+            model = load_model(self.filepath, compile=False,
+                               custom_objects={
+                                               "precision": precision, 
+                                               "recall": recall, 
+                                               "f1": f1
+                                               })
             print("Restored model from:", self.filepath)
 
             return model
@@ -42,7 +59,8 @@ class ImageScore(object):
         #Use utils.preprocess_input(x, version=1) for VGG16
         #Use utils.preprocess_input(x, version=2) for RESNET50 or SENET50
 
-        scores = self.model.predict(x=self.img, verbose=1)[0]
+        with session.as_default():
+            scores = self.model.predict(x=self.img, verbose=1)[0]
         
         preds = dict()
         for i in range(len(classes)):
