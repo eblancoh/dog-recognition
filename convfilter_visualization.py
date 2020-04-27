@@ -14,8 +14,9 @@ from keras import backend as K
 import tensorflow as tf
 
 
+
 def normalize(x):
-    """Utility function to normalize a tensor.
+    """utility function to normalize a tensor.
 
     # Arguments
         x: An input tensor.
@@ -27,7 +28,7 @@ def normalize(x):
 
 
 def deprocess_image(x):
-    """Utility function to convert a float array into a valid uint8 image.
+    """utility function to convert a float array into a valid uint8 image.
 
     # Arguments
         x: A numpy-array representing the generated image.
@@ -53,7 +54,7 @@ def deprocess_image(x):
 
 
 def process_image(x, former):
-    """Utility function to convert a valid uint8 image back into a float array.
+    """utility function to convert a valid uint8 image back into a float array.
        Reverses `deprocess_image`.
 
     # Arguments
@@ -140,8 +141,6 @@ def visualize_layer(model,
                 (1, intermediate_dim[0], intermediate_dim[1], 3))
         input_img_data = (input_img_data - 0.5) * 20 + 128
 
-        print(input_img_data.shape)
-
         # Slowly upscaling towards the original size prevents
         # a dominating high-frequency of the to visualized structure
         # as it would occur if we directly compute the 412d-image.
@@ -157,14 +156,15 @@ def visualize_layer(model,
                 if loss_value <= K.epsilon():
                     return None
 
-            # Calulate upscaled dimension
+            # Calculate upscaled dimension
             intermediate_dim = tuple(
                 int(x / (upscaling_factor ** up)) for x in output_dim)
             # Upscale
             img = deprocess_image(input_img_data[0])
             img = np.array(pil_image.fromarray(img).resize(intermediate_dim,
                                                            pil_image.BICUBIC))
-            input_img_data = [process_image(img, input_img_data[0])]
+            input_img_data = np.expand_dims(
+                process_image(img, input_img_data[0]), 0)
 
         # decode the resulting input image
         img = deprocess_image(input_img_data[0])
@@ -269,7 +269,8 @@ def main():
 
     # the name of the layer we want to visualize
     # (see model definition at keras/applications/vgg16.py)
-    LAYER_NAME = 'conv5_3'
+    # LAYER_NAME = 'conv5_3'
+    LAYER_NAME = 'conv3_3'
 
     # TODO: limpiar el script un poco.
     # vgg = vgg16.VGG16(weights='imagenet', include_top=False)
